@@ -12,7 +12,7 @@ if not os.path.isdir(app.config["UPLOAD_FOLDER"]):
 
 @app.route("/", methods=["GET"])
 def hello():
-    return send_file("uploads\837568.png")
+    return {"hello": "world"}
 
 @app.route("/ocr", methods=["POST"])
 def ocr():
