@@ -55,3 +55,6 @@ webencodings==0.5.1
 Werkzeug==3.0.1
 zipp==3.17.0
 zopfli==0.2.3
+tensorflow
+tensorflow-addons
+tf2onnx

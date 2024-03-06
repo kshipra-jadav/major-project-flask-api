@@ -1,7 +1,7 @@
-from flask import Flask, request, Response
+from flask import Flask, request, Response, send_file
 from doctr.io import DocumentFile
+from doctr.models import ocr_predictor
 import os
-
 
 UPLOAD_FOLDER = "uploads"
 app = Flask(__name__)
@@ -12,7 +12,7 @@ if not os.path.isdir(app.config["UPLOAD_FOLDER"]):
 
 @app.route("/", methods=["GET"])
 def hello():
-    return {"hello": "world"}
+    return send_file("uploads\837568.png")
 
 @app.route("/ocr", methods=["POST"])
 def ocr():
@@ -22,9 +22,15 @@ def ocr():
             return Response("Image Not Attached!", status=400)
         
         img = request.files['image']
-        img.save(os.path.join(app.config["UPLOAD_FOLDER"], img.filename))
+        img_path = os.path.join(app.config["UPLOAD_FOLDER"], img.filename)
+        img.save(img_path)
+        
+        model = ocr_predictor(pretrained=True)
+        doc = DocumentFile.from_images(img_path)
 
-        return "file upload"
+        result = model(doc)
+
+        return result.render()
 
 
 
